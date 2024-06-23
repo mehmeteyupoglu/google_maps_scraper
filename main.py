@@ -10,6 +10,38 @@ import sys
 
 _timeout = 100
 
+unwanted_words_in_name = [
+    'Şok Market',
+    'A101',
+    'Bim',
+    'Migros',
+    'Carrefour',
+    'Tarım Kredi Kooperatifleri',
+    'Koçtaş',
+    'Tekzen',
+    'Çağrı Market',
+    'A101 Market',
+    'File Market',
+    'File',
+    'Migros Sanal Market',
+    'Migros Market',
+    'Migros Jet',
+    'Yemeksepeti',
+    'Yemek Sepeti',
+    'TK Kooperatifleri',
+    'TK Koop',
+    'TK Koop.',
+    'TK Koop. A.Ş.',
+    'Ekomini',
+    'Ekomini Market',
+    'Seç Market',
+    'Seç Marketler',
+    'Seç Marketleri',
+    '101',
+    '101 Market',
+    'BİM'
+]
+
 @dataclass
 class Business:
     """holds business data"""
@@ -194,8 +226,11 @@ def main():
                     business = Business()
                    
                     if len(listing.get_attribute(name_attibute)) >= 1:
-        
-                        business.name = listing.get_attribute(name_attibute)
+                        name = listing.get_attribute(name_attibute)
+                        if not any(word in name for word in unwanted_words_in_name):
+                            business.name = name
+                        else:
+                            continue
                     else:
                         business.name = ""
                     if page.locator(address_xpath).count() > 0:
