@@ -8,6 +8,8 @@ import argparse
 import os
 import sys
 
+_timeout = 100
+
 @dataclass
 class Business:
     """holds business data"""
@@ -115,16 +117,16 @@ def main():
 
         page.goto("https://www.google.com/maps", timeout=60000)
         # wait is added for dev phase. can remove it in production
-        page.wait_for_timeout(5000)
+        page.wait_for_timeout(_timeout)
         
         for search_for_index, search_for in enumerate(search_list):
             print(f"-----\n{search_for_index} - {search_for}".strip())
 
             page.locator('//input[@id="searchboxinput"]').fill(search_for)
-            page.wait_for_timeout(3000)
+            page.wait_for_timeout(_timeout)
 
             page.keyboard.press("Enter")
-            page.wait_for_timeout(5000)
+            page.wait_for_timeout(_timeout)
 
             # scrolling
             page.hover('//a[contains(@href, "https://www.google.com/maps/place")]')
@@ -134,7 +136,7 @@ def main():
             previously_counted = 0
             while True:
                 page.mouse.wheel(0, 10000)
-                page.wait_for_timeout(3000)
+                page.wait_for_timeout(5000)
 
                 if (
                     page.locator(
@@ -179,7 +181,7 @@ def main():
             for listing in listings:
                 try:
                     listing.click()
-                    page.wait_for_timeout(5000)
+                    page.wait_for_timeout(_timeout)
 
                     name_attibute = 'aria-label'
                     address_xpath = '//button[@data-item-id="address"]//div[contains(@class, "fontBodyMedium")]'
